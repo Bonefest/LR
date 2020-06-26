@@ -14,6 +14,24 @@ entt::dispatcher& SystemsManager::getDispatcher() {
 }
 
 void SystemsManager::updateSystems(const sf::Time& delta) {
+    std::list<prioritized_system> poppedSystems = getSystems();
+
+    for(auto system: poppedSystems) {
+        system.second->update(m_registry, m_dispatcher, delta);
+        m_systems.push(system);
+    }
+}
+
+void SystemsManager::drawSystems(Window& window) {
+    std::list<prioritized_system> poppedSystems = getSystems();
+
+    for(auto system: poppedSystems) {
+        system.second->draw(window, m_registry, m_dispatcher);
+        m_systems.push(system);
+    }
+}
+
+std::list<prioritized_system> SystemsManager::getSystems() {
     std::list<prioritized_system> poppedSystems;
 
     while(!m_systems.empty()) {
@@ -21,11 +39,8 @@ void SystemsManager::updateSystems(const sf::Time& delta) {
         m_systems.pop();
     }
 
-    for(auto system: poppedSystems) {
+    return poppedSystems;
 
-        system.second->update(m_registry, m_dispatcher, delta);
-        m_systems.push(system);
-    }
 }
 
 void SystemsManager::addSystem(SystemPtr system, int priority) {

@@ -5,6 +5,9 @@
 #include <string>
 
 #include "EventManager.h"
+#include "SystemsManager.h"
+
+class SystemsManager;
 
 class Window {
 public:
@@ -22,6 +25,7 @@ public:
     inline sf::Vector2u getSize() const { return m_windowSize; }
     inline std::string getTitle() const { return m_title; }
     inline EventManager* getEventManager() { return &m_eventManager; }
+    inline SystemsManager* getSystemsManager() { return m_systemsManager; }
 
     inline bool isFullscreen() const { return m_fullscreen; }
     void setFullscreen(bool toggle);
@@ -43,6 +47,7 @@ private:
 
     sf::RenderWindow    m_window;
     EventManager        m_eventManager;
+    SystemsManager*     m_systemsManager;
 
     std::string         m_title;
     sf::Vector2u        m_windowSize;

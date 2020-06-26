@@ -8,11 +8,14 @@
 #include "ResourcesManager.h"
 #include "AnimationManager.h"
 
+#include "SystemsManager.h"
+
 struct StateContext {
     Window*             window;
     EventManager*       eventManager;
     TextureManager*     textureManager;
     AnimationManager*   animationManager;
+    SystemsManager*     systemsManager;
 };
 
 class BaseState;

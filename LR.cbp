@@ -13,7 +13,16 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-g" />
+					<Add directory="Dependencies/SFML/include" />
+					<Add directory="Dependencies" />
+					<Add directory="include" />
 				</Compiler>
+				<Linker>
+					<Add library="sfml-graphics" />
+					<Add library="sfml-window" />
+					<Add library="sfml-system" />
+					<Add directory="Dependencies/SFML/lib" />
+				</Linker>
 			</Target>
 			<Target title="Release">
 				<Option output="bin/Release/LR" prefix_auto="1" extension_auto="1" />
@@ -32,7 +41,46 @@
 			<Add option="-Wall" />
 			<Add option="-fexceptions" />
 		</Compiler>
+		<Unit filename="include/AnimatedSprite.h" />
+		<Unit filename="include/Animation.h" />
+		<Unit filename="include/AnimationManager.h" />
+		<Unit filename="include/Common.h" />
+		<Unit filename="include/DirectionalAnimation.h" />
+		<Unit filename="include/EventManager.h" />
+		<Unit filename="include/Game.h" />
+		<Unit filename="include/Game/Events.h" />
+		<Unit filename="include/Game/IntroState.h" />
+		<Unit filename="include/Game/MainGame.h" />
+		<Unit filename="include/Game/MainGameState.h" />
+		<Unit filename="include/Game/Player.h" />
+		<Unit filename="include/Game/PlayerState.h" />
+		<Unit filename="include/Game/Systems.h" />
+		<Unit filename="include/Math.h" />
+		<Unit filename="include/ResourcesManager.h" />
+		<Unit filename="include/StateBase.h" />
+		<Unit filename="include/StateManager.h" />
+		<Unit filename="include/StateType.h" />
+		<Unit filename="include/System.h" />
+		<Unit filename="include/SystemsManager.h" />
+		<Unit filename="include/Textbox.h" />
+		<Unit filename="include/Window.h" />
 		<Unit filename="main.cpp" />
+		<Unit filename="src/AnimatedSprite.cpp" />
+		<Unit filename="src/Animation.cpp" />
+		<Unit filename="src/AnimationManager.cpp" />
+		<Unit filename="src/DirectionalAnimation.cpp" />
+		<Unit filename="src/EventManager.cpp" />
+		<Unit filename="src/Game.cpp" />
+		<Unit filename="src/Game/IntroState.cpp" />
+		<Unit filename="src/Game/MainGame.cpp" />
+		<Unit filename="src/Game/MainGameState.cpp" />
+		<Unit filename="src/Game/PlayerState.cpp" />
+		<Unit filename="src/Math.cpp" />
+		<Unit filename="src/StateBase.cpp" />
+		<Unit filename="src/StateManager.cpp" />
+		<Unit filename="src/SystemsManager.cpp" />
+		<Unit filename="src/Textbox.cpp" />
+		<Unit filename="src/Window.cpp" />
 		<Extensions>
 			<envvars />
 			<code_completion />

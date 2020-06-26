@@ -6,11 +6,17 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "Window.h"
+
+class Window;
+
 class System {
 public:
-    virtual void onCreate(entt::registry& registry, entt::dispatcher& dispatcher);
-    virtual void update(entt::registry& registry, entt::dispatcher& dispatcher, const sf::Time& dt);
-    virtual void onDestroy();
+    virtual void onCreate(entt::registry& registry, entt::dispatcher& dispatcher) { }
+    virtual void update(entt::registry& registry, entt::dispatcher& dispatcher, const sf::Time& dt) { }
+    virtual void onDestroy() { }
+    virtual void draw(Window& window, entt::registry& registry, entt::dispatcher& dispatcher) { }
+
 
 };
 

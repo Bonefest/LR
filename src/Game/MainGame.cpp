@@ -7,6 +7,8 @@ MainGame::MainGame(const std::string& title,
 
 
 void MainGame::onCreate() {
+    m_stateManager.getContext()->textureManager->loadPathsFromFile("textures.cfg");
+
     m_stateManager.registerState<IntroState>(StateType::Intro);
     m_stateManager.registerState<MainGameState>(StateType::Game);
     m_stateManager.setState(StateType::Intro);

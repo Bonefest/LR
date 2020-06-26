@@ -1,4 +1,5 @@
 #include "Game.h"
+#include <iostream>
 
 Game::Game(const std::string& title, sf::Vector2u windowSize): m_window(title, windowSize) {
     setFrameLimit(60);
@@ -10,6 +11,12 @@ Game::Game(const std::string& title, sf::Vector2u windowSize): m_window(title, w
     context->window = &m_window;
     context->eventManager = m_window.getEventManager();
     context->animationManager = m_animationManager;
+    context->systemsManager = m_window.getSystemsManager();
+    context->textureManager = &m_texManager;
+}
+
+Game::~Game() {
+    delete m_animationManager;
 }
 
 void Game::run() {
@@ -24,11 +31,13 @@ void Game::run() {
         m_elapsedTime += m_clock.restart();
         if(m_elapsedTime > m_frameTime) {
             update(m_frameTime);
+            m_stateManager.getContext()->systemsManager->updateSystems(m_frameTime);
             m_elapsedTime -= m_frameTime;
         }
 
-        m_window.beganDrawing();
+        m_window.beganDrawing(sf::Color::White);
         draw();
+        m_stateManager.getContext()->systemsManager->drawSystems(m_window);
         m_window.endDrawing();
     }
 }

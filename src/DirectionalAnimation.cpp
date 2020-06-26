@@ -11,7 +11,15 @@ bool DirectionalAnimation::nextFrame() {
         return false;
     }
 
-    m_currentFramePosition += m_directionVector;
+    if(m_direction == ROW && m_currentFramePosition.x == m_endFramePosition.x) {
+        m_currentFramePosition.y += m_frameSize.y;
+    }
+    else if(m_direction == COLUMN && m_currentFramePosition.y == m_endFramePosition.y) {
+        m_currentFramePosition.x += m_frameSize.x;
+    }
+    else {
+        m_currentFramePosition += m_directionVector;
+    }
     return true;
 }
 

@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1593188042 source:/home/miofix/Programming/GameDevelopment/LR/LR/main.cpp
+1593204274 source:/home/miofix/Programming/GameDevelopment/LR/LR/main.cpp
 	"Game/MainGame.h"
 
 1592854211 /home/miofix/Programming/GameDevelopment/LR/LR/Dependencies/json.hpp
@@ -794,7 +794,7 @@
 	<SFML/Graphics/Drawable.hpp>
 	<SFML/Window/GlResource.hpp>
 
-1593190197 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/MainGame.cpp
+1593205183 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/MainGame.cpp
 	"Game/MainGame.h"
 	"Game/IntroState.h"
 	"Game/MainGameState.h"
@@ -802,16 +802,17 @@
 1593189144 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/MainGame.h
 	"Game.h"
 
-1593191365 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game.h
+1593199423 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game.h
 	"Window.h"
 	"StateManager.h"
 	"ResourcesManager.h"
 	"AnimationManager.h"
 
-1593191064 /home/miofix/Programming/GameDevelopment/LR/LR/include/Window.h
+1593199361 /home/miofix/Programming/GameDevelopment/LR/LR/include/Window.h
 	<SFML/Graphics.hpp>
 	<string>
 	"EventManager.h"
+	"SystemsManager.h"
 
 1592249850 /home/miofix/Programming/GameDevelopment/LR/LR/include/EventManager.h
 	<map>
@@ -825,14 +826,15 @@
 
 1592250137 /home/miofix/Programming/GameDevelopment/LR/LR/include/StateType.h
 
-1593191149 /home/miofix/Programming/GameDevelopment/LR/LR/include/StateManager.h
+1593198819 /home/miofix/Programming/GameDevelopment/LR/LR/include/StateManager.h
 	"Window.h"
 	"StateBase.h"
 	"StateType.h"
 	"ResourcesManager.h"
 	"AnimationManager.h"
+	"SystemsManager.h"
 
-1593189689 /home/miofix/Programming/GameDevelopment/LR/LR/include/StateBase.h
+1593198822 /home/miofix/Programming/GameDevelopment/LR/LR/include/StateBase.h
 	<SFML/Graphics.hpp>
 	"StateManager.h"
 
@@ -872,7 +874,7 @@
 	<string>
 	<vector>
 
-1593077214 /home/miofix/Programming/GameDevelopment/LR/LR/include/ResourcesManager.h
+1593205544 /home/miofix/Programming/GameDevelopment/LR/LR/include/ResourcesManager.h
 	<map>
 	<string>
 	<fstream>
@@ -883,7 +885,7 @@
 	"Animation.h"
 	"Common.h"
 
-1593165232 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/DirectionalAnimation.cpp
+1593204595 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/DirectionalAnimation.cpp
 	"DirectionalAnimation.h"
 	<utility>
 
@@ -893,8 +895,9 @@
 	<sstream>
 	<iostream>
 
-1593191300 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game.cpp
+1593206380 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game.cpp
 	"Game.h"
+	<iostream>
 
 1591643759 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Math.cpp
 	"Math.h"
@@ -918,10 +921,12 @@
 	<SFML/Graphics.hpp>
 	"Window.h"
 
-1592250215 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Window.cpp
+1593206049 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Window.cpp
 	"Window.h"
+	"entt.hpp"
+	"Game/Events.h"
 
-1593190747 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/IntroState.cpp
+1593196803 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/IntroState.cpp
 	"Game/IntroState.h"
 	"Game/MainGameState.h"
 	"StateType.h"
@@ -930,25 +935,56 @@
 1593188656 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/IntroState.h
 	"StateBase.h"
 
-1593189357 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/MainGameState.h
+1593200487 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/MainGameState.h
 	"StateBase.h"
+	"Player.h"
 
 1593190831 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/MainGame/MainGameState.cpp
 	"Game/MainGameState.h"
 	<iostream>
 
-1593192620 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/SystemsManager.cpp
+1593196969 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/SystemsManager.cpp
 	"SystemsManager.h"
 	<list>
 
-1593192587 /home/miofix/Programming/GameDevelopment/LR/LR/include/SystemsManager.h
+1593196563 /home/miofix/Programming/GameDevelopment/LR/LR/include/SystemsManager.h
 	<queue>
 	<memory>
 	"System.h"
 	<SFML/Graphics.hpp>
+	"Window.h"
 
-1593192636 /home/miofix/Programming/GameDevelopment/LR/LR/include/System.h
+1593199094 /home/miofix/Programming/GameDevelopment/LR/LR/include/System.h
 	<memory>
 	"entt.hpp"
 	<SFML/Graphics.hpp>
+	"Window.h"
+
+1593208505 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/MainGameState.cpp
+	"Game/MainGameState.h"
+	<iostream>
+	"Game/Systems.h"
+
+1593209018 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/PlayerState.cpp
+	"Game/PlayerState.h"
+	"Game/Player.h"
+
+1593208246 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/PlayerState.h
+	<memory>
+	"entt.hpp"
+	"Window.h"
+	<SFML/Graphics.hpp>
+	"Game/Events.h"
+
+1593208984 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Systems.h
+	"System.h"
+	"Player.h"
+	"Game/Events.h"
+
+1593201028 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Player.h
+	"AnimatedSprite.h"
+	"PlayerState.h"
+	<memory>
+
+1593199011 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Events.h
 

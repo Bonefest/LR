@@ -1,8 +1,12 @@
 #include "Window.h"
+#include "entt.hpp"
+#include "Game/Events.h"
+
 
 Window::Window(): m_title("Window"), m_windowSize(640, 480), m_fullscreen(false) {
     create();
     initBindings();
+    m_systemsManager = new SystemsManager();
 }
 
 Window::Window(const std::string& title,
@@ -12,10 +16,12 @@ Window::Window(const std::string& title,
 
     create();
     initBindings();
+    m_systemsManager = new SystemsManager();
 }
 
 Window::~Window() {
     destroy();
+    delete m_systemsManager;
 }
 
 void Window::initBindings() {
@@ -43,6 +49,13 @@ void Window::toggleFullscreenEvent(EventDetails* details) {
 void Window::update() {
     sf::Event event;
     while(m_window.pollEvent(event)) {
+        if(event.type == sf::Event::KeyPressed) {
+            m_systemsManager->getDispatcher().trigger<KeyEvent>(event.key.code, true);
+        }
+        else if(event.type == sf::Event::KeyReleased) {
+            m_systemsManager->getDispatcher().trigger<KeyEvent>(event.key.code, false);
+        }
+
         m_eventManager.handleEvent(event);
     }
     m_eventManager.update();

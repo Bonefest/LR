@@ -9,6 +9,7 @@
 class Game {
 public:
     Game(const std::string& title, sf::Vector2u windowSize);
+    ~Game();
 
     void run();
 
