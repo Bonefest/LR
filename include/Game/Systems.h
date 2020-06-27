@@ -2,7 +2,7 @@
 #define SYSTEMS_H_INCLUDED
 
 #include "System.h"
-#include "Player.h"
+#include "Components.h"
 #include "Game/Events.h"
 
 class PlayerAnimationsControllSystem: public System {
@@ -17,7 +17,16 @@ public:
 
     void draw(Window& window, entt::registry& registry, entt::dispatcher& dispatcher) {
         auto playersView = registry.view<Player>();
+        CamerasContext& cameras = registry.ctx<CamerasContext>();
         playersView.each([&](entt::entity plr, Player& player){
+            // CHECK IF THEY ARE SWAPPED
+            if(player.color == WHITE) {
+                window.setView(*cameras.whiteView);
+            }
+            else {
+                window.setView(*cameras.blackView);
+            }
+
             window.draw(*player.sprite);
         });
     }
@@ -46,6 +55,28 @@ public:
 
 private:
     std::vector<KeyEvent> m_keys;
+};
+
+class ObstacleRenderingSystem: public System {
+public:
+    void draw(Window& window, entt::registry& registry, entt::dispatcher& dispatcher) {
+        CamerasContext& context = registry.ctx<CamerasContext>();
+        auto obstacleView = registry.view<Obstacle>();
+        //Sort obstacle views from top-to-down from right-to-left
+        //sort from left-top to right bottom
+        obstacleView.each([&](entt::entity obstcle, Obstacle& obstacle) {
+
+            if(obstacle.color == WHITE) {
+                window.setView(*context.whiteView);
+            }
+            else {
+                window.setView(*context.blackView);
+            }
+
+            sf::RenderWindow* rwindow = window.getWindow();
+            rwindow->draw(obstacle.vertices, 18, sf::PrimitiveType::Triangles);
+        });
+    }
 };
 
 #endif // SYSTEMS_H_INCLUDED

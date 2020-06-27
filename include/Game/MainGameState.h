@@ -2,7 +2,7 @@
 #define MAINGAMESTATE_H_INCLUDED
 
 #include "StateBase.h"
-#include "Player.h"
+#include "Components.h"
 
 class MainGameState: public BaseState {
 public:
@@ -23,8 +23,11 @@ public:
 private:
     entt::entity createPlayer(PlayerColor);
 
-    sf::View m_leftCamera;
-    sf::View m_rightCamera;
+    sf::View        m_blackCamera;
+    sf::View        m_whiteCamera;
+
+    entt::entity    m_black;
+    entt::entity    m_white;
 
 };
 

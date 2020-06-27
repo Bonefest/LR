@@ -808,7 +808,7 @@
 	"ResourcesManager.h"
 	"AnimationManager.h"
 
-1593199361 /home/miofix/Programming/GameDevelopment/LR/LR/include/Window.h
+1593233874 /home/miofix/Programming/GameDevelopment/LR/LR/include/Window.h
 	<SFML/Graphics.hpp>
 	<string>
 	"EventManager.h"
@@ -895,7 +895,7 @@
 	<sstream>
 	<iostream>
 
-1593206380 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game.cpp
+1593237762 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game.cpp
 	"Game.h"
 	<iostream>
 
@@ -921,7 +921,7 @@
 	<SFML/Graphics.hpp>
 	"Window.h"
 
-1593206049 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Window.cpp
+1593233907 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Window.cpp
 	"Window.h"
 	"entt.hpp"
 	"Game/Events.h"
@@ -935,9 +935,9 @@
 1593188656 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/IntroState.h
 	"StateBase.h"
 
-1593200487 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/MainGameState.h
+1593232463 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/MainGameState.h
 	"StateBase.h"
-	"Player.h"
+	"Components.h"
 
 1593190831 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/MainGame/MainGameState.cpp
 	"Game/MainGameState.h"
@@ -960,14 +960,16 @@
 	<SFML/Graphics.hpp>
 	"Window.h"
 
-1593208505 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/MainGameState.cpp
+1593239550 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/MainGameState.cpp
 	"Game/MainGameState.h"
 	<iostream>
 	"Game/Systems.h"
+	"Game/Components.h"
 
-1593209018 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/PlayerState.cpp
+1593240025 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/PlayerState.cpp
 	"Game/PlayerState.h"
-	"Game/Player.h"
+	"Game/Components.h"
+	"Game/Constants.h"
 
 1593208246 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/PlayerState.h
 	<memory>
@@ -976,15 +978,22 @@
 	<SFML/Graphics.hpp>
 	"Game/Events.h"
 
-1593208984 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Systems.h
+1593239906 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Systems.h
 	"System.h"
-	"Player.h"
+	"Components.h"
 	"Game/Events.h"
 
-1593201028 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Player.h
+1593232356 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Player.h
+
+1593199011 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Events.h
+
+1593240107 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Components.h
+	<SFML/Graphics.hpp>
 	"AnimatedSprite.h"
 	"PlayerState.h"
 	<memory>
+	"Constants.h"
 
-1593199011 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Events.h
+1593240152 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Constants.h
+	<SFML/Graphics.hpp>
 

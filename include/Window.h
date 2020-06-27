@@ -39,6 +39,8 @@ public:
 
     inline sf::RenderWindow* getWindow() { return &m_window; }
 
+    void setView(const sf::View& view);
+
 private:
     void create();
     void destroy();

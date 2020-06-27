@@ -2,6 +2,7 @@
 #include <iostream>
 
 #include "Game/Systems.h"
+#include "Game/Components.h"
 
 MainGameState::MainGameState(StateManager* manager): BaseState(manager) { }
 
@@ -11,25 +12,41 @@ void MainGameState::onCreate() {
     animationManager->loadAnimationsFromFile("animations.json");
 
     SystemsManager* manager = m_smanager->getContext()->systemsManager;
-    manager->addSystem(std::make_shared<PlayerAnimationsControllSystem>(), 5);
-    manager->addSystem(std::make_shared<KeyEventsNotifier>(), 5);
+
+    manager->addSystem(std::make_shared<ObstacleRenderingSystem>(), 1);
+    manager->addSystem(std::make_shared<PlayerAnimationsControllSystem>(), 2);
+    manager->addSystem(std::make_shared<KeyEventsNotifier>(), 2);
 
     auto windowSize = m_smanager->getContext()->window->getSize();
 
-    m_leftCamera = sf::View(sf::Vector2f(-windowSize.x, 0.0f),
+    m_blackCamera = sf::View(sf::Vector2f(0.0f, 0.0f),
                             sf::Vector2f(windowSize.x * 0.5f,  windowSize.y));
-    m_leftCamera.setViewport(sf::FloatRect(0.0f, 0.0f, 0.5f, 1.0f));
+    m_blackCamera.setViewport(sf::FloatRect(0.0f, 0.0f, 0.5f, 1.0f));
 
-    m_rightCamera = sf::View(sf::Vector2f(windowSize.x , 0.0f),
+    m_blackCamera.zoom(0.5f);
+
+    m_whiteCamera = sf::View(sf::Vector2f(windowSize.x , 0.0f),
                              sf::Vector2f(windowSize.x * 0.5f, windowSize.y));
-    m_rightCamera.setViewport(sf::FloatRect(0.5f, 0.0f, 0.5f, 1.0f));
+    m_whiteCamera.setViewport(sf::FloatRect(0.5f, 0.0f, 0.5f, 1.0f));
 
-    m_view = sf::View(sf::Vector2f(windowSize.x, windowSize.y) * 0.5f,
-                      sf::Vector2f(windowSize.x, windowSize.y));
+    m_whiteCamera.zoom(0.5f);
 
-    m_view.zoom(0.5f);
+    entt::registry& registry = manager->getRegistry();
+    registry.set<CamerasContext>(&m_blackCamera, &m_whiteCamera);
 
-    createPlayer(BLACK);
+//    m_view = sf::View(sf::Vector2f(windowSize.x, windowSize.y) * 0.5f,
+//                      sf::Vector2f(windowSize.x, windowSize.y));
+//
+//    m_view.zoom(0.5f);
+
+    m_black = createPlayer(BLACK);
+    //m_white = createPlayer(WHITE);
+
+    auto obstacle = registry.create();
+    registry.assign<Obstacle>(obstacle, BLACK, sf::Vector2f(0.0f, 0.0f), sf::Vector3i(200.0f, 200.0f, 100.0f));
+
+    obstacle = registry.create();
+    registry.assign<Obstacle>(obstacle, WHITE, sf::Vector2f(30.0f, 0.0f), sf::Vector3i(200.0f, 200.0f, 100.0f));
 }
 
 void MainGameState::onDestroy() {
@@ -49,7 +66,8 @@ void MainGameState::draw() {
 }
 
 void MainGameState::update(const sf::Time& dt) {
-
+    Player& player = m_smanager->getContext()->systemsManager->getRegistry().get<Player>(m_black);
+    m_blackCamera.setCenter(player.sprite->getPosition());
 }
 
 

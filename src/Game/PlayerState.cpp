@@ -1,5 +1,7 @@
 #include "Game/PlayerState.h"
-#include "Game/Player.h"
+#include "Game/Components.h"
+
+#include "Game/Constants.h"
 
 static MovingDirection getDirection(sf::Keyboard::Key key, PlayerColor color) {
     if(key == sf::Keyboard::A) {
@@ -94,9 +96,11 @@ void PlayerMovingState::onActivate(entt::registry& registry, entt::dispatcher& d
         m_velocity = sf::Vector2f( SPEED, 0.0f);
     }
     else if(m_direction == TOP) {
+        player.sprite->setFlipped(true);
         m_velocity = sf::Vector2f( 0.0, -SPEED);
     }
     else if(m_direction == BOTTOM) {
+        player.sprite->setFlipped(false);
         m_velocity = sf::Vector2f( 0.0, SPEED);
     }
 
@@ -106,7 +110,7 @@ void PlayerMovingState::update(entt::registry& registry,
                                entt::dispatcher& dispatcher,
                                const sf::Time& dt) {
     Player& player = registry.get<Player>(m_player);
-    player.sprite->setPosition(player.sprite->getPosition() + m_velocity * dt.asSeconds());
+    player.sprite->setPosition(player.sprite->getPosition() + m_velocity.x * dt.asSeconds() * Constants::i + m_velocity.y * dt.asSeconds() * Constants::j);
 
     for(auto key: m_keys) {
         if(!key.pressed && key.key == m_key) {

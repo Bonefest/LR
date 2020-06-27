@@ -91,3 +91,7 @@ void Window::destroy() {
 bool Window::loadBindings(const std::string& fileName) {
     return m_eventManager.loadBindingsFromFile(fileName);
 }
+
+void Window::setView(const sf::View& view) {
+    m_window.setView(view);
+}

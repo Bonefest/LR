@@ -35,7 +35,7 @@ void Game::run() {
             m_elapsedTime -= m_frameTime;
         }
 
-        m_window.beganDrawing(sf::Color::White);
+        m_window.beganDrawing();
         draw();
         m_stateManager.getContext()->systemsManager->drawSystems(m_window);
         m_window.endDrawing();
