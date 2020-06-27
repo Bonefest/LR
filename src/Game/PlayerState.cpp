@@ -11,10 +11,10 @@ static MovingDirection getDirection(sf::Keyboard::Key key, PlayerColor color) {
         return (color == PlayerColor::WHITE) ? RIGHT : LEFT;
     }
     else if(key == sf::Keyboard::W) {
-        return (color == PlayerColor::WHITE) ? TOP : BOTTOM;
+        return (color == PlayerColor::WHITE) ? BOTTOM : TOP;
     }
     else if(key == sf::Keyboard::S) {
-        return (color == PlayerColor::WHITE) ? BOTTOM : TOP;
+        return (color == PlayerColor::WHITE) ? TOP : BOTTOM;
     }
 
     return NONE;

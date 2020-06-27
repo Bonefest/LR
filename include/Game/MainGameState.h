@@ -4,6 +4,8 @@
 #include "StateBase.h"
 #include "Components.h"
 
+#include "Game/GameMap.h"
+
 class MainGameState: public BaseState {
 public:
 
@@ -28,6 +30,9 @@ private:
 
     entt::entity    m_black;
     entt::entity    m_white;
+
+    GameMap*        m_blackMap;
+    GameMap*        m_whiteMap;
 
 };
 

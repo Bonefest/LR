@@ -13,7 +13,7 @@ void MainGameState::onCreate() {
 
     SystemsManager* manager = m_smanager->getContext()->systemsManager;
 
-    manager->addSystem(std::make_shared<ObstacleRenderingSystem>(), 1);
+    manager->addSystem(std::make_shared<GameMapsRenderingSystem>(), 1);
     manager->addSystem(std::make_shared<PlayerAnimationsControllSystem>(), 2);
     manager->addSystem(std::make_shared<KeyEventsNotifier>(), 2);
 
@@ -42,15 +42,27 @@ void MainGameState::onCreate() {
     m_black = createPlayer(BLACK);
     //m_white = createPlayer(WHITE);
 
-    auto obstacle = registry.create();
-    registry.assign<Obstacle>(obstacle, BLACK, sf::Vector2f(0.0f, 0.0f), sf::Vector3i(200.0f, 200.0f, 100.0f));
+    m_blackMap = new GameMap(BLACK);
+    m_whiteMap = new GameMap(WHITE);
 
-    obstacle = registry.create();
-    registry.assign<Obstacle>(obstacle, WHITE, sf::Vector2f(30.0f, 0.0f), sf::Vector3i(200.0f, 200.0f, 100.0f));
+    registry.set<GameMaps>(m_blackMap, m_whiteMap);
+
+    m_blackMap->setPlatform(0, 0);
+    m_blackMap->setPlatform(1, 0);
+    m_blackMap->setPlatform(2, 0);
+    m_blackMap->setPlatform(2, 1);
+    m_blackMap->setPlatform(2, 2);
+    m_blackMap->setPlatform(2, 3);
+    m_blackMap->setPlatform(2, 4);
+    m_blackMap->setPlatform(3, 4);
+    m_blackMap->setPlatform(4, 4);
+
+
 }
 
 void MainGameState::onDestroy() {
-
+    delete m_blackMap;
+    delete m_whiteMap;
 }
 
 void MainGameState::onActivate() {

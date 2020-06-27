@@ -57,25 +57,17 @@ private:
     std::vector<KeyEvent> m_keys;
 };
 
-class ObstacleRenderingSystem: public System {
+class GameMapsRenderingSystem: public System {
 public:
     void draw(Window& window, entt::registry& registry, entt::dispatcher& dispatcher) {
         CamerasContext& context = registry.ctx<CamerasContext>();
-        auto obstacleView = registry.view<Obstacle>();
-        //Sort obstacle views from top-to-down from right-to-left
-        //sort from left-top to right bottom
-        obstacleView.each([&](entt::entity obstcle, Obstacle& obstacle) {
+        GameMaps& gameMaps = registry.ctx<GameMaps>();
 
-            if(obstacle.color == WHITE) {
-                window.setView(*context.whiteView);
-            }
-            else {
-                window.setView(*context.blackView);
-            }
+        window.setView(*context.whiteView);
+        gameMaps.whiteMap->draw(window);
 
-            sf::RenderWindow* rwindow = window.getWindow();
-            rwindow->draw(obstacle.vertices, 18, sf::PrimitiveType::Triangles);
-        });
+        window.setView(*context.blackView);
+        gameMaps.blackMap->draw(window);
     }
 };
 
