@@ -28,6 +28,7 @@ private:
 
     sf::View        m_blackCamera;
     sf::View        m_whiteCamera;
+    sf::View        m_uiCamera;
 
     entt::entity    m_black;
     entt::entity    m_white;

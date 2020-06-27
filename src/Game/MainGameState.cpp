@@ -15,11 +15,14 @@ void MainGameState::onCreate() {
 
     SystemsManager* manager = m_smanager->getContext()->systemsManager;
 
+
     manager->addSystem(std::make_shared<GameMapsRenderingSystem>(), 1);
     manager->addSystem(std::make_shared<FlameRenderingSystem>(), 2);
     manager->addSystem(std::make_shared<PlayerAnimationsControllSystem>(), 3);
     manager->addSystem(std::make_shared<KeyEventsNotifier>(), 3);
     manager->addSystem(std::make_shared<AttackSystem>(), 4);
+    manager->addSystem(std::make_shared<UIRenderingSystem>(m_smanager->getContext()->textureManager), 5);
+    manager->addSystem(std::make_shared<UITipSystem>(), 6);
 
     auto windowSize = m_smanager->getContext()->window->getSize();
 
@@ -35,8 +38,24 @@ void MainGameState::onCreate() {
 
     m_whiteCamera.zoom(0.5f);
 
+    m_uiCamera = sf::View(sf::Vector2f(windowSize.x * 0.5f, windowSize.y * 0.5f),
+                          sf::Vector2f(windowSize.x, windowSize.y));
+
+    m_uiCamera.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 1.0f));
+
+    manager->getDispatcher().trigger<TipEvent>("          This world is broken.\n"
+                                               "It seems like you know now how to connect\n"
+                                               "          to parallel university.", sf::seconds(4.0f), 5);
+    manager->getDispatcher().trigger<TipEvent>("Use [WASD] to move around", sf::seconds(4.0f),5);
+    manager->getDispatcher().trigger<TipEvent>("   Wait! All your actions are\n"
+                                               "connected to parallel university.\n", sf::seconds(3.0f), 5);
+    manager->getDispatcher().trigger<TipEvent>("Be sure you know what you are doing...\n", sf::seconds(3.0f), 5);
+    manager->getDispatcher().trigger<TipEvent>("Use [X] for sprint and [Z] for attacking\n", sf::seconds(4.0f), 5);
+    manager->getDispatcher().trigger<TipEvent>("Use [Space] for swapping between universities\n", sf::seconds(4.0f), 5);
+
     entt::registry& registry = manager->getRegistry();
-    registry.set<CamerasContext>(&m_blackCamera, &m_whiteCamera);
+    registry.set<GameData>(3);
+    registry.set<CamerasContext>(&m_blackCamera, &m_whiteCamera, &m_uiCamera);
 
     m_blackMap = new GameMap(BLACK);
     m_blackMap->setStartPosition(sf::Vector2f(0.0f, 0.0f));

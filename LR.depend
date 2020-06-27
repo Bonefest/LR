@@ -935,7 +935,7 @@
 1593188656 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/IntroState.h
 	"StateBase.h"
 
-1593271902 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/MainGameState.h
+1593280574 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/MainGameState.h
 	"StateBase.h"
 	"Components.h"
 	"Game/GameMap.h"
@@ -961,14 +961,14 @@
 	<SFML/Graphics.hpp>
 	"Window.h"
 
-1593277939 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/MainGameState.cpp
+1593286846 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/MainGameState.cpp
 	"Game/MainGameState.h"
 	<iostream>
 	"Game/Systems.h"
 	"Game/Components.h"
 	"Game/FlameState.h"
 
-1593275462 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/PlayerState.cpp
+1593283497 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/PlayerState.cpp
 	"Game/PlayerState.h"
 	"Game/Components.h"
 	"Game/Constants.h"
@@ -982,7 +982,7 @@
 	"Game/Events.h"
 	"Constants.h"
 
-1593278074 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Systems.h
+1593287565 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Systems.h
 	"System.h"
 	"Components.h"
 	"Game/Events.h"
@@ -991,9 +991,10 @@
 
 1593232356 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Player.h
 
-1593272967 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Events.h
+1593284918 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Events.h
+	<string>
 
-1593277039 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Components.h
+1593280620 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Components.h
 	<SFML/Graphics.hpp>
 	"AnimatedSprite.h"
 	"PlayerState.h"
@@ -1014,10 +1015,11 @@
 	"Game/Constants.h"
 	<iostream>
 
-1593277842 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/FlameState.cpp
+1593278640 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/FlameState.cpp
 	"Game/FlameState.h"
 	"Game/Components.h"
 	<cmath>
+	<iostream>
 
 1593276855 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/FlameState.h
 	"Game/PlayerState.h"

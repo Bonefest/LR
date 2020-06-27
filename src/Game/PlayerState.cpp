@@ -346,7 +346,7 @@ void PlayerFallingState::update(entt::registry& registry,
     m_elapsedTime += dt;
     if(m_elapsedTime.asSeconds() > 1.0f) {
         player.sprite->setPosition(player.gameMap->getStartPosition());
-        //trigger player fall event
+        dispatcher.trigger<PlayerFallEvent>(m_player);
         setState(registry, dispatcher, std::make_shared<PlayerIdleState>(m_player));
     }
 

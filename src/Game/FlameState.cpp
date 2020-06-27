@@ -17,8 +17,8 @@ void FlameIdleState::update(entt::registry& registry,
     Flame& flame = registry.get<Flame>(m_player);
     m_elapsedTime += dt;
 
-    float s = std::max(std::sin(m_elapsedTime.asSeconds()) * 0.25f + 0.25f, 0.05f);
-    float c = std::max(std::cos(m_elapsedTime.asSeconds()) * 0.35f + 0.35f, 0.05f);
+    float s = std::max(std::sin(m_elapsedTime.asSeconds()) * 0.20f + 0.20f, 0.1f);
+    float c = std::max(std::cos(m_elapsedTime.asSeconds()) * 0.40f + 0.40f, 0.1f);
 
     flame.sprite->setScale(c, s);
 }
@@ -32,10 +32,9 @@ void FlameDeathState::update(entt::registry& registry,
 
     m_elapsedTime += dt;
     float t = m_elapsedTime.asSeconds() / 0.5f;
-    if(t >= 0.5f) {
+    if(t >= 1.0f) {
         registry.destroy(m_player);
         return;
     }
-
-    flame.sprite->scale(t, t);
+    flame.sprite->setColor(sf::Color(255, 255, 255, 255 * (1.0f - t)));
 }

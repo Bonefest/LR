@@ -40,11 +40,15 @@ struct Player {
 };
 
 struct CamerasContext {
-    CamerasContext(sf::View* l_blackView, sf::View* l_whiteView): blackView(l_blackView),
-                                                                  whiteView(l_whiteView) { }
+    CamerasContext(sf::View* l_blackView,
+                   sf::View* l_whiteView,
+                   sf::View* l_uiView): blackView(l_blackView),
+                                        whiteView(l_whiteView),
+                                        uiView(l_uiView) { }
 
     sf::View*   blackView;
     sf::View*   whiteView;
+    sf::View*   uiView;
 };
 
 struct Flame {
@@ -58,6 +62,12 @@ struct Flame {
     std::shared_ptr<AnimatedSprite> sprite;
     PlayerColor                     color;
     PlayerStatePtr                  state;
+};
+
+struct GameData {
+    GameData(int l_health): health(l_health) { }
+
+    int health;
 };
 
 #endif // COMPONENTS_H_INCLUDED
