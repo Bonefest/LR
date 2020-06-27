@@ -55,12 +55,10 @@ void MainGameState::onCreate() {
     m_levelManager.setAnimationManager(m_smanager->getContext()->animationManager);
     m_levelManager.setLevel(registry, manager->getDispatcher(), std::make_shared<TutorialLevel>(&m_levelManager));
 
+    manager->getDispatcher().sink<KeyEvent>().connect<&MainGameState::onKeyAction>(*this);
 }
 
-void MainGameState::onDestroy() {
-    delete m_blackMap;
-    delete m_whiteMap;
-}
+void MainGameState::onDestroy() { }
 
 void MainGameState::onActivate() {
 
@@ -76,7 +74,16 @@ void MainGameState::draw() {
 
 void MainGameState::update(const sf::Time& dt) {
 
+
     SystemsManager* manager = m_smanager->getContext()->systemsManager;
+
+    for(auto event: m_events) {
+        if(event.pressed && event.key == sf::Keyboard::R) {
+            m_levelManager.setLevel(manager->getRegistry(), manager->getDispatcher(), std::make_shared<LevelOne>(&m_levelManager));
+        }
+    }
+
+
     m_levelManager.update(manager->getRegistry(), manager->getDispatcher(), dt);
 
     Player& blackPlayer = m_smanager->getContext()->systemsManager->getRegistry().get<Player>(m_black);
@@ -91,6 +98,8 @@ void MainGameState::update(const sf::Time& dt) {
         m_blackCamera.setCenter(whitePlayer.sprite->getPosition());
         m_whiteCamera.setCenter(blackPlayer.sprite->getPosition());
     }
+
+    m_events.clear();
 }
 
 
@@ -122,5 +131,9 @@ entt::entity MainGameState::createPlayer(PlayerColor color) {
     idleState->onActivate(registry, m_smanager->getContext()->systemsManager->getDispatcher());
 
     return player;
+}
+
+void MainGameState::onKeyAction(const KeyEvent& event) {
+    m_events.push_back(event);
 }
 

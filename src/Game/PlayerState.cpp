@@ -350,18 +350,23 @@ void PlayerFallingState::update(entt::registry& registry,
 
         dispatcher.trigger<PlayerFallEvent>(m_player);
 
+        auto playersView = registry.view<Player>();
+        playersView.each([&](entt::entity plr, Player& l_player){
+            l_player.sprite->setPosition(player.gameMap->getStartPosition());
+        });
+
         if(data.health <= 1) {
-            auto playersView = registry.view<Player>();
             playersView.each([&](entt::entity plr, Player& l_player){
-                l_player.sprite->setPosition(player.gameMap->getStartPosition());
                 l_player.sprite->setColor(sf::Color(0, 0, 0, 0));
                 l_player.currentState->setState(registry, dispatcher, std::make_shared<PlayerDeathState>(m_player));
             });
 
             return;
         }
-        player.sprite->setPosition(player.gameMap->getStartPosition());
-        setState(registry, dispatcher, std::make_shared<PlayerIdleState>(m_player));
+
+        playersView.each([&](entt::entity plr, Player& l_player) {
+            l_player.currentState->setState(registry, dispatcher, std::make_shared<PlayerIdleState>(plr));
+        });
     }
 
     player.sprite->setPosition(player.sprite->getPosition() + sf::Vector2f(0.0f, 250.0f) * dt.asSeconds());

@@ -23,6 +23,7 @@ public:
     virtual void draw();
     virtual void update(const sf::Time& dt);
 
+    void onKeyAction(const KeyEvent& event);
 private:
     entt::entity createPlayer(PlayerColor);
     entt::entity createFlame(const sf::Vector2f& position, PlayerColor);
@@ -38,6 +39,8 @@ private:
     GameMap*        m_whiteMap;
 
     LevelManager    m_levelManager;
+
+    std::vector<KeyEvent>   m_events;
 
 };
 

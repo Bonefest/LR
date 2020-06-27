@@ -159,20 +159,21 @@ public:
 
     void onCreate(entt::registry& registry, entt::dispatcher& dispatcher) {
         for(int i = 0;i < 3; ++i) {
-            std::shared_ptr<sf::Sprite> sprite = std::make_shared<sf::Sprite>();
-            sprite->setTexture(*m_texManager->get("heart"));
-
-            auto texSize = sprite->getTexture()->getSize();
-            sprite->setOrigin(texSize.x * 0.5f, texSize.y * 0.5f);
-
-            m_hearts.push_back(sprite);
+            createHeart();
         }
 
         dispatcher.sink<PlayerFallEvent>().connect<&UIRenderingSystem::onPlayerFall>(*this);
     }
 
     void update(entt::registry& registry, entt::dispatcher& dispatcher, const sf::Time& dt) {
+
         GameData& data = registry.ctx<GameData>();
+        if(m_hearts.size() < data.health) {
+            for(int i = 0;i < data.health - m_hearts.size(); ++i) {
+                createHeart();
+            }
+        }
+
         data.health = std::max<int>(0, data.health - m_events.size());
         while(!m_events.empty()) {
             if(!m_hearts.empty()) {
@@ -207,6 +208,16 @@ public:
     }
 
 private:
+    void createHeart() {
+        std::shared_ptr<sf::Sprite> sprite = std::make_shared<sf::Sprite>();
+        sprite->setTexture(*m_texManager->get("heart"));
+
+        auto texSize = sprite->getTexture()->getSize();
+        sprite->setOrigin(texSize.x * 0.5f, texSize.y * 0.5f);
+
+        m_hearts.push_back(sprite);
+    }
+
     std::vector<std::shared_ptr<sf::Sprite>> m_hearts;
     TextureManager*                          m_texManager;
 
@@ -270,6 +281,7 @@ public:
         if(m_currentMessage.priority < event.priority) {
             m_currentMessage = event;
             updateText();
+            m_messages.clear();
         } else {
 
             if(!m_messages.empty()) {
@@ -277,12 +289,15 @@ public:
                 for(auto it = m_messages.begin(); it != m_messages.end(); it++) {
                     if(it->priority < event.priority) {
 
-        std::cout << event.message << " " << event.priority << "\n";
                         break;
                     }
                 }
 
                 m_messages.insert(it, event);
+                it = it++;
+                while(it != m_messages.end()) {
+                    it = m_messages.erase(it);
+                }
             } else {
                 m_messages.push_back(event);
             }

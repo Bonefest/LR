@@ -45,36 +45,9 @@ public:
                         entt::dispatcher& dispatcher,
                         const sf::Time& dt) { }
 
-    void resetPlayers(entt::registry& registry, entt::dispatcher& dispatcher) {
-        auto playersView = registry.view<Player>();
-        playersView.each([&](entt::entity plr, Player& player) {
-            if(player.color == WHITE) {
-                player.gameMap = m_whiteMap;
-            } else {
-                player.gameMap = m_blackMap;
-            }
+    void resetPlayers(entt::registry& registry, entt::dispatcher& dispatcher);
 
-            player.sprite->setPosition(player.gameMap->getStartPosition());
-        });
-
-    }
-
-
-    entt::entity createFlame(entt::registry& registry, const sf::Vector2f& position, PlayerColor color) {
-        entt::entity flame = registry.create();
-
-        std::shared_ptr<AnimatedSprite> sprite = std::make_shared<AnimatedSprite>();
-        sprite->setAnimation("flame", m_manager->getAnimationManager()->getAnimation("flame"));
-        sprite->activateAnimation("flame");
-        sprite->setPosition(position);
-        sprite->setOrigin(50.0f, 50.0f);
-
-        PlayerStatePtr state = std::make_shared<FlameIdleState>(flame);
-
-        registry.assign<Flame>(flame, sprite, color, state);
-
-        return flame;
-    }
+    entt::entity createFlame(entt::registry& registry, const sf::Vector2f& position, PlayerColor color);
 
 protected:
     GameMap*        m_whiteMap;
@@ -83,11 +56,89 @@ protected:
     LevelManager*   m_manager;
 };
 
+class LevelOne: public Level {
+public:
+    LevelOne(LevelManager* manager): Level(manager) { }
+
+    void onLoad(entt::registry& registry, entt::dispatcher& dispatcher) {
+
+        dispatcher.trigger<TipEvent>("Level one", sf::seconds(5.0f), 100);
+        std::cout << "here\n";
+
+        m_whiteMap = new GameMap(WHITE);
+        m_blackMap = new GameMap(BLACK);
+
+        m_whiteMap->setPlatform(5, 5);
+        m_whiteMap->setPlatform(5, 6);
+        m_whiteMap->setPlatform(5, 7);
+        m_whiteMap->setPlatform(5, 8);
+        m_whiteMap->setPlatform(4, 8);
+        m_whiteMap->setPlatform(3, 8);
+        m_whiteMap->setPlatform(6, 8);
+        m_whiteMap->setPlatform(7, 8);
+        m_whiteMap->setPlatform(8, 8);
+        m_whiteMap->setPlatform(8, 9);
+        m_whiteMap->setPlatform(8, 10);
+        m_whiteMap->setPlatform(8, 11);
+        m_whiteMap->setPlatform(8, 12);
+        m_whiteMap->setPlatform(7, 12);
+        m_whiteMap->setPlatform(6, 12);
+        m_whiteMap->setPlatform(5, 12);
+        m_whiteMap->setPlatform(3, 12);
+        m_whiteMap->setPlatform(2, 12);
+
+
+        m_whiteMap->setStartPosition(m_whiteMap->convertToGlobalCoords(sf::Vector2i(5, 5)));
+
+
+        m_blackMap->setPlatform(10, 12);
+        m_blackMap->setPlatform(10, 11);
+        m_blackMap->setPlatform(10, 10);
+        m_blackMap->setPlatform(10, 9);
+        m_blackMap->setPlatform(11, 9);
+        m_blackMap->setPlatform(12, 9);
+        m_blackMap->setPlatform(9, 9);
+        m_blackMap->setPlatform(8, 9);
+        m_blackMap->setPlatform(7, 9);
+        m_blackMap->setPlatform(7, 8);
+        m_blackMap->setPlatform(7, 7);
+        m_blackMap->setPlatform(7, 6);
+        m_blackMap->setPlatform(7, 5);
+        m_blackMap->setPlatform(8, 5);
+        m_blackMap->setPlatform(9, 5);
+        m_blackMap->setPlatform(10, 5);
+        m_blackMap->setPlatform(11, 5);
+        m_blackMap->setPlatform(12, 5);
+
+        m_blackMap->setStartPosition(m_blackMap->convertToGlobalCoords(sf::Vector2i(10, 12)));
+
+        GameMaps& maps = registry.ctx<GameMaps>();
+        maps.whiteMap = m_whiteMap;
+        maps.blackMap = m_blackMap;
+
+        resetPlayers(registry, dispatcher);
+
+        m_flame[0] = createFlame(registry, m_whiteMap->convertToGlobalCoords(sf::Vector2i(2, 12)), WHITE);
+        m_flame[1] = createFlame(registry, m_whiteMap->convertToGlobalCoords(sf::Vector2i(12, 5)), BLACK);
+    }
+
+    void update(entt::registry& registry, entt::dispatcher& dispatcher, const sf::Time& dt) {
+        if(!registry.valid(m_flame[0]) && !registry.valid(m_flame[1])) {
+            std::cout << "switch to ... \n";
+        }
+    }
+
+private:
+    entt::entity m_flame[2];
+
+};
+
 class TutorialLevel: public Level {
 public:
     TutorialLevel(LevelManager* manager): Level(manager) { }
 
     virtual void onLoad(entt::registry& registry, entt::dispatcher& dispatcher) {
+        dispatcher.trigger<TipEvent>("[Tutorial] (to skip press R)", sf::seconds(2.0f), 5);
         dispatcher.trigger<TipEvent>("          This world is broken.\n"
                                                "It seems like you know now how to connect\n"
                                                "          to parallel university.", sf::seconds(4.0f), 5);
@@ -128,7 +179,7 @@ public:
     void update(entt::registry& registry, entt::dispatcher& dispatcher, const sf::Time& dt) {
         m_elapsedTime += dt;
         if(m_elapsedTime.asSeconds() > 31.0f) {
-            //m_manager->setLevel(registry, dispatcher, std::make_shared<LevelOne>(m_manager));
+            m_manager->setLevel(registry, dispatcher, std::make_shared<LevelOne>(m_manager));
         }
     }
 
