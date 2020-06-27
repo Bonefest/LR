@@ -64,7 +64,10 @@ void PlayerIdleState::update(entt::registry& registry,
                              entt::dispatcher& dispatcher,
                              const sf::Time& dt) {
 
+
     Player& player = registry.get<Player>(m_player);
+    player.lastPosition = player.sprite->getPosition();
+    player.idle += dt;
 
     for(auto _key : m_keys) {
         if(_key.pressed) {
@@ -80,6 +83,12 @@ void PlayerIdleState::update(entt::registry& registry,
 
             if(key == sf::Keyboard::X) {
                 tryMoveThrough(registry, dispatcher, player);
+            }
+            else if(key == sf::Keyboard::Z) {
+                tryAttack(registry, dispatcher, player);
+            }
+            else if(key == sf::Keyboard::Space && m_keys.size() == 1) {
+                tryTransform(registry, dispatcher, player);
             }
         }
     }
@@ -111,13 +120,36 @@ void PlayerIdleState::tryMoveThrough(entt::registry& registry, entt::dispatcher&
     futurePos += float(direction.y) * Constants::j * Constants::platformSize.y * 1.5f;
 
     if(player.gameMap->isSet(futurePos)) {
+        player.idle = sf::seconds(0.0f);
         setState(registry, dispatcher, std::make_shared<PlayerMovingThroughState>(m_player));
     }
 }
 
+void PlayerIdleState::tryAttack(entt::registry& registry,
+                                entt::dispatcher& dispatcher,
+                                Player& player) {
+    if(player.color == WHITE) {
+        player.idle = sf::seconds(0.0f);
+        setState(registry, dispatcher, std::make_shared<PlayerAttackState>(m_player));
+    }
 
+}
 
+void PlayerIdleState::tryTransform(entt::registry& registry,
+                                   entt::dispatcher& dispatcher,
+                                   Player& player) {
+    auto playersView = registry.view<Player>();
+    bool idle = player.idle.asSeconds() > 0.5f;
+    playersView.each([&](entt::entity plr, Player& otherPlayer){
+        idle = idle && (otherPlayer.idle.asSeconds() > 0.5f);
+    });
 
+    if(idle) {
+        //trigger on transform event for particles
+        setState(registry, dispatcher, std::make_shared<PlayerTransformState>(m_player));
+    }
+
+}
 
 PlayerMovingState::PlayerMovingState(entt::entity player,
                                      sf::Keyboard::Key key,
@@ -204,4 +236,82 @@ void PlayerMovingThroughState::update(entt::registry& registry, entt::dispatcher
     }
 
     player.sprite->setPosition(m_startPoint * (1.0f - t) + m_endPoint * t);
+}
+
+
+PlayerAttackState::PlayerAttackState(entt::entity player): PlayerState(player) { }
+
+void PlayerAttackState::onActivate(entt::registry& registry, entt::dispatcher& dispatcher) {
+    Player& player = registry.get<Player>(m_player);
+    player.sprite->activateAnimation("attack");
+    player.sprite->resetAnimation();
+    //trigger attack event somewhere
+}
+
+void PlayerAttackState::update(entt::registry& registry,
+                               entt::dispatcher& dispatcher,
+                               const sf::Time& dt) {
+    Player& player = registry.get<Player>(m_player);
+    if(player.sprite->getCurrentAnimation()->isFinished()) {
+        setState(registry, dispatcher, std::make_shared<PlayerIdleState>(m_player));
+    }
+}
+
+
+
+
+PlayerTransformState::PlayerTransformState(entt::entity player): PlayerState(player) { }
+
+void PlayerTransformState::onActivate(entt::registry& registry, entt::dispatcher& dispatcher) {
+    Player& player = registry.get<Player>(m_player);
+    player.sprite->activateAnimation("transform");
+    player.sprite->resetAnimation();
+    m_animationFinished = false;
+}
+
+void PlayerTransformState::update(entt::registry& registry,
+                                  entt::dispatcher& dispatcher,
+                                  const sf::Time& dt) {
+    Player& player = registry.get<Player>(m_player);
+    if(m_animationFinished) {
+        m_elapsedTime += dt;
+        float t = m_elapsedTime.asSeconds() / 0.495f;
+        sf::Color playerColor = player.sprite->getColor();
+        if(t >= 1.0f) {
+            playerColor.a = 255;
+            player.sprite->setColor(playerColor);
+            setState(registry, dispatcher, std::make_shared<PlayerIdleState>(m_player));
+            return;
+        }
+
+        playerColor.a = std::min<sf::Uint8>(t * 255, 255);
+        player.sprite->setColor(playerColor);
+
+    } else {
+        if(player.sprite->getCurrentAnimation()->isFinished()) {
+            player.sprite->activateAnimation("idle");
+            sf::Color playerColor = player.sprite->getColor();
+            playerColor.a = 0;
+            playerColor.r = 255;
+            playerColor.g = 255;
+            playerColor.b = 255;
+            player.sprite->setColor(playerColor);
+            m_animationFinished = true;
+
+            GameMaps& maps = registry.ctx<GameMaps>();
+            auto playersView = registry.view<Player>();
+            playersView.each([&](entt::entity plr, Player& otherPlayer){
+                if(plr != m_player) {
+                    player.sprite->setPosition(otherPlayer.lastPosition);
+                    if(player.gameMap == maps.blackMap) {
+                        player.gameMap = maps.whiteMap;
+                    } else {
+                        player.gameMap = maps.blackMap;
+                    }
+                }
+            });
+        } else {
+            player.sprite->setColor(sf::Color(rand() % 255, rand() % 255, rand() % 255));
+        }
+    }
 }

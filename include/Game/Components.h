@@ -33,6 +33,8 @@ struct Player {
     PlayerColor                     color;
     GameMap*                        gameMap;
     MovingDirection                 lastMovingDirection;
+    sf::Vector2f                    lastPosition;
+    sf::Time                        idle;
 };
 
 struct CamerasContext {

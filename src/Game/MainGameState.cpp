@@ -56,6 +56,7 @@ void MainGameState::onCreate() {
     m_whiteMap->setPlatform(0, 0);
     m_whiteMap->setPlatform(1, 0);
     m_whiteMap->setPlatform(1, 1);
+    m_whiteMap->setPlatform(1, 3);
 
 }
 
@@ -79,11 +80,15 @@ void MainGameState::draw() {
 void MainGameState::update(const sf::Time& dt) {
 
     Player& blackPlayer = m_smanager->getContext()->systemsManager->getRegistry().get<Player>(m_black);
-    m_blackCamera.setCenter(blackPlayer.sprite->getPosition());
-
     Player& whitePlayer = m_smanager->getContext()->systemsManager->getRegistry().get<Player>(m_white);
-    m_whiteCamera.setCenter(whitePlayer.sprite->getPosition());
 
+    if(blackPlayer.gameMap == m_blackMap) {
+        m_blackCamera.setCenter(blackPlayer.sprite->getPosition());
+        m_whiteCamera.setCenter(whitePlayer.sprite->getPosition());
+    } else {
+        m_blackCamera.setCenter(whitePlayer.sprite->getPosition());
+        m_whiteCamera.setCenter(blackPlayer.sprite->getPosition());
+    }
 }
 
 

@@ -18,9 +18,9 @@ public:
     void draw(Window& window, entt::registry& registry, entt::dispatcher& dispatcher) {
         auto playersView = registry.view<Player>();
         CamerasContext& cameras = registry.ctx<CamerasContext>();
+        GameMaps& gameMaps = registry.ctx<GameMaps>();
         playersView.each([&](entt::entity plr, Player& player){
-            // CHECK IF THEY ARE SWAPPED
-            if(player.color == WHITE) {
+            if(player.gameMap == gameMaps.whiteMap) {
                 window.setView(*cameras.whiteView);
             }
             else {

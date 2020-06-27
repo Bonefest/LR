@@ -49,6 +49,8 @@ public:
 	virtual void onKeyEvent(KeyEvent event);
 private:
     void tryMoveThrough(entt::registry& registry, entt::dispatcher& dispatcher, Player& player);
+    void tryAttack(entt::registry& registry, entt::dispatcher& dispatcher, Player& player);
+    void tryTransform(entt::registry& registry, entt::dispatcher& dispatcher, Player& player);
 
     std::vector<KeyEvent> m_keys;
 };
@@ -88,6 +90,32 @@ private:
     sf::Vector2f    m_startPoint;
 
     sf::Time        m_elapsedTime;
+};
+
+class PlayerAttackState: public PlayerState {
+public:
+    PlayerAttackState(entt::entity player);
+
+    virtual void onActivate(entt::registry& registry, entt::dispatcher& dispatcher);
+
+    virtual void update(entt::registry& registry,
+                        entt::dispatcher& dispatcher,
+                        const sf::Time& dt);
+
+};
+
+class PlayerTransformState: public PlayerState {
+public:
+    PlayerTransformState(entt::entity player);
+
+    virtual void onActivate(entt::registry& registry, entt::dispatcher& dispatcher);
+
+    virtual void update(entt::registry& registry,
+                        entt::dispatcher& dispatcher,
+                        const sf::Time& dt);
+private:
+    sf::Time    m_elapsedTime;
+    bool        m_animationFinished;
 };
 
 
