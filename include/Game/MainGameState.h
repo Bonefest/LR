@@ -5,6 +5,7 @@
 #include "Components.h"
 
 #include "Game/GameMap.h"
+#include "Game/Level.h"
 
 class MainGameState: public BaseState {
 public:
@@ -35,6 +36,8 @@ private:
 
     GameMap*        m_blackMap;
     GameMap*        m_whiteMap;
+
+    LevelManager    m_levelManager;
 
 };
 

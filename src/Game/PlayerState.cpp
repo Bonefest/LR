@@ -342,13 +342,33 @@ void PlayerFallingState::update(entt::registry& registry,
                                 entt::dispatcher& dispatcher,
                                 const sf::Time& dt) {
     Player& player = registry.get<Player>(m_player);
+    GameData& data = registry.ctx<GameData>();
+
 
     m_elapsedTime += dt;
     if(m_elapsedTime.asSeconds() > 1.0f) {
-        player.sprite->setPosition(player.gameMap->getStartPosition());
+
         dispatcher.trigger<PlayerFallEvent>(m_player);
+
+        if(data.health <= 1) {
+            auto playersView = registry.view<Player>();
+            playersView.each([&](entt::entity plr, Player& l_player){
+                l_player.sprite->setPosition(player.gameMap->getStartPosition());
+                l_player.sprite->setColor(sf::Color(0, 0, 0, 0));
+                l_player.currentState->setState(registry, dispatcher, std::make_shared<PlayerDeathState>(m_player));
+            });
+
+            return;
+        }
+        player.sprite->setPosition(player.gameMap->getStartPosition());
         setState(registry, dispatcher, std::make_shared<PlayerIdleState>(m_player));
     }
 
     player.sprite->setPosition(player.sprite->getPosition() + sf::Vector2f(0.0f, 250.0f) * dt.asSeconds());
+}
+
+PlayerDeathState::PlayerDeathState(entt::entity player): PlayerState(player) { }
+
+void PlayerDeathState::onActivate(entt::registry& registry, entt::dispatcher& dispatcher) {
+    dispatcher.trigger<TipEvent>("You lose! Press [R] to restart.", sf::seconds(5.0f), 10);
 }

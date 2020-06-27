@@ -133,4 +133,11 @@ private:
     sf::Time    m_elapsedTime;
 };
 
+class PlayerDeathState: public PlayerState {
+public:
+    PlayerDeathState(entt::entity player);
+
+    void onActivate(entt::registry& registry, entt::dispatcher& dispatcher);
+};
+
 #endif // PLAYERSTATE_H_INCLUDED
