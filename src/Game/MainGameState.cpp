@@ -25,7 +25,7 @@ void MainGameState::onCreate() {
 
     m_blackCamera.zoom(0.5f);
 
-    m_whiteCamera = sf::View(sf::Vector2f(windowSize.x , 0.0f),
+    m_whiteCamera = sf::View(sf::Vector2f(0.0f , 0.0f),
                              sf::Vector2f(windowSize.x * 0.5f, windowSize.y));
     m_whiteCamera.setViewport(sf::FloatRect(0.5f, 0.0f, 0.5f, 1.0f));
 
@@ -34,12 +34,11 @@ void MainGameState::onCreate() {
     entt::registry& registry = manager->getRegistry();
     registry.set<CamerasContext>(&m_blackCamera, &m_whiteCamera);
 
-    //m_white = createPlayer(WHITE);
-
     m_blackMap = new GameMap(BLACK);
     m_whiteMap = new GameMap(WHITE);
 
     m_black = createPlayer(BLACK);
+    m_white = createPlayer(WHITE);
 
     registry.set<GameMaps>(m_blackMap, m_whiteMap);
 
@@ -78,8 +77,13 @@ void MainGameState::draw() {
 }
 
 void MainGameState::update(const sf::Time& dt) {
-    Player& player = m_smanager->getContext()->systemsManager->getRegistry().get<Player>(m_black);
-    m_blackCamera.setCenter(player.sprite->getPosition());
+
+    Player& blackPlayer = m_smanager->getContext()->systemsManager->getRegistry().get<Player>(m_black);
+    m_blackCamera.setCenter(blackPlayer.sprite->getPosition());
+
+    Player& whitePlayer = m_smanager->getContext()->systemsManager->getRegistry().get<Player>(m_white);
+    m_whiteCamera.setCenter(whitePlayer.sprite->getPosition());
+
 }
 
 
@@ -102,8 +106,8 @@ entt::entity MainGameState::createPlayer(PlayerColor color) {
         sprite->setAnimation("attack", animManager->getAnimation("white_attack"));
     }
 
-//    sprite->setAnimation("transform",
-//                         animManager->getAnimation( (color == BLACK) ? "black_transform" : "white_transform"));
+    sprite->setAnimation("transform",
+                         animManager->getAnimation( (color == BLACK) ? "black_transform" : "white_transform"));
 
     PlayerStatePtr idleState = std::make_shared<PlayerIdleState>(player);
     registry.assign<Player>(player, sprite, idleState, color, (color == BLACK) ? m_blackMap : m_whiteMap);

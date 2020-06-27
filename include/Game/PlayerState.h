@@ -10,13 +10,12 @@
 
 #include "Game/Events.h"
 
+#include "Constants.h"
+
+class Player;
 class PlayerState;
 
 using PlayerStatePtr = std::shared_ptr<PlayerState>;
-
-enum MovingDirection {
-    LEFT, TOP, RIGHT, BOTTOM, NONE
-};
 
 class PlayerState {
 public:
@@ -49,6 +48,8 @@ public:
                         const sf::Time& dt);
 	virtual void onKeyEvent(KeyEvent event);
 private:
+    void tryMoveThrough(entt::registry& registry, entt::dispatcher& dispatcher, Player& player);
+
     std::vector<KeyEvent> m_keys;
 };
 
@@ -70,6 +71,23 @@ private:
     sf::Vector2f        m_velocity;
 
     std::vector<KeyEvent> m_keys;
+};
+
+class PlayerMovingThroughState: public PlayerState {
+public:
+    PlayerMovingThroughState(entt::entity player);
+
+    virtual void onActivate(entt::registry& registry, entt::dispatcher& dispatcher);
+
+	virtual void update(entt::registry& registry,
+                        entt::dispatcher& dispatcher,
+                        const sf::Time& dt);
+
+private:
+    sf::Vector2f    m_endPoint;
+    sf::Vector2f    m_startPoint;
+
+    sf::Time        m_elapsedTime;
 };
 
 

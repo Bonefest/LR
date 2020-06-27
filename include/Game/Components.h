@@ -32,6 +32,7 @@ struct Player {
     PlayerStatePtr                  currentState;
     PlayerColor                     color;
     GameMap*                        gameMap;
+    MovingDirection                 lastMovingDirection;
 };
 
 struct CamerasContext {
