@@ -28,6 +28,8 @@ public:
             }
 
             window.draw(*player.sprite);
+
+
         });
     }
 };

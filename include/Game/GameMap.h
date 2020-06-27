@@ -16,6 +16,8 @@ public:
     void draw(Window& window);
 
     void setOffset(const sf::Vector2f& offset);
+    sf::Vector2i convertToMapCoords(const sf::Vector2f& position) const;
+    bool isSet(const sf::Vector2f& position) const;
 
 private:
     void initVertices();
@@ -25,6 +27,7 @@ private:
     PlayerColor                     m_color;
 
     sf::Vertex                      m_vertices[18];
+    sf::RectangleShape              m_background;
     //TOP-LEFT
     sf::Vector2f                    m_offset;
 

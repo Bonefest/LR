@@ -34,29 +34,29 @@ void MainGameState::onCreate() {
     entt::registry& registry = manager->getRegistry();
     registry.set<CamerasContext>(&m_blackCamera, &m_whiteCamera);
 
-//    m_view = sf::View(sf::Vector2f(windowSize.x, windowSize.y) * 0.5f,
-//                      sf::Vector2f(windowSize.x, windowSize.y));
-//
-//    m_view.zoom(0.5f);
-
-    m_black = createPlayer(BLACK);
     //m_white = createPlayer(WHITE);
 
     m_blackMap = new GameMap(BLACK);
     m_whiteMap = new GameMap(WHITE);
 
+    m_black = createPlayer(BLACK);
+
     registry.set<GameMaps>(m_blackMap, m_whiteMap);
 
     m_blackMap->setPlatform(0, 0);
     m_blackMap->setPlatform(1, 0);
+    m_blackMap->setPlatform(1, 1);
     m_blackMap->setPlatform(2, 0);
-    m_blackMap->setPlatform(2, 1);
+    m_blackMap->setPlatform(4, 0);
+    m_blackMap->setPlatform(6, 0);
+    m_blackMap->setPlatform(0, 2);
     m_blackMap->setPlatform(2, 2);
-    m_blackMap->setPlatform(2, 3);
-    m_blackMap->setPlatform(2, 4);
-    m_blackMap->setPlatform(3, 4);
-    m_blackMap->setPlatform(4, 4);
+    m_blackMap->setPlatform(4, 2);
+    m_blackMap->setPlatform(6, 2);
 
+    m_whiteMap->setPlatform(0, 0);
+    m_whiteMap->setPlatform(1, 0);
+    m_whiteMap->setPlatform(1, 1);
 
 }
 
@@ -94,7 +94,7 @@ entt::entity MainGameState::createPlayer(PlayerColor color) {
                          animManager->getAnimation( (color == BLACK) ? "black_idle" : "white_idle"));
     sprite->setAnimation("move",
                          animManager->getAnimation( (color == BLACK) ? "black_move" : "white_move"));
-    sprite->setOrigin(64.0f, 64.0f);
+    sprite->setOrigin(64.0f, 100.0f);
 
     if(color == BLACK) {
         sprite->setAnimation("move_through", animManager->getAnimation("black_move_through"));
@@ -106,7 +106,7 @@ entt::entity MainGameState::createPlayer(PlayerColor color) {
 //                         animManager->getAnimation( (color == BLACK) ? "black_transform" : "white_transform"));
 
     PlayerStatePtr idleState = std::make_shared<PlayerIdleState>(player);
-    registry.assign<Player>(player, sprite, idleState, color);
+    registry.assign<Player>(player, sprite, idleState, color, (color == BLACK) ? m_blackMap : m_whiteMap);
 
     idleState->onActivate(registry, m_smanager->getContext()->systemsManager->getDispatcher());
 

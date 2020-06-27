@@ -105,12 +105,18 @@ void PlayerMovingState::onActivate(entt::registry& registry, entt::dispatcher& d
     }
 
 }
-
+#include <iostream>
 void PlayerMovingState::update(entt::registry& registry,
                                entt::dispatcher& dispatcher,
                                const sf::Time& dt) {
     Player& player = registry.get<Player>(m_player);
-    player.sprite->setPosition(player.sprite->getPosition() + m_velocity.x * dt.asSeconds() * Constants::i + m_velocity.y * dt.asSeconds() * Constants::j);
+
+
+    sf::Vector2f nextPos = player.sprite->getPosition() + m_velocity.x * dt.asSeconds() * Constants::i + m_velocity.y * dt.asSeconds() * Constants::j;
+
+    if(player.gameMap->isSet(nextPos)) {
+        player.sprite->setPosition(nextPos);
+    }
 
     for(auto key: m_keys) {
         if(!key.pressed && key.key == m_key) {
