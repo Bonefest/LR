@@ -45,7 +45,9 @@ void PlayerState::setState(entt::registry& registry,
                            entt::dispatcher& dispatcher,
                            PlayerStatePtr state) {
     Player& player = registry.get<Player>(m_player);
-    player.currentState->onDeactivate(registry, dispatcher);
+    if(player.currentState != nullptr) {
+        player.currentState->onDeactivate(registry, dispatcher);
+    }
     player.currentState = state;
     player.currentState->onActivate(registry, dispatcher);
 }
@@ -68,6 +70,10 @@ void PlayerIdleState::update(entt::registry& registry,
 
 
     Player& player = registry.get<Player>(m_player);
+    if(player.dead) {
+        setState(registry, dispatcher, std::make_shared<PlayerDeathState>(m_player));
+    }
+
     player.lastPosition = player.sprite->getPosition();
     player.idle += dt;
 
@@ -351,20 +357,20 @@ void PlayerFallingState::update(entt::registry& registry,
         dispatcher.trigger<PlayerFallEvent>(m_player);
 
         auto playersView = registry.view<Player>();
-        playersView.each([&](entt::entity plr, Player& l_player){
-            l_player.sprite->setPosition(player.gameMap->getStartPosition());
-        });
 
         if(data.health <= 1) {
             playersView.each([&](entt::entity plr, Player& l_player){
+                l_player.dead = true;
                 l_player.sprite->setColor(sf::Color(0, 0, 0, 0));
-                l_player.currentState->setState(registry, dispatcher, std::make_shared<PlayerDeathState>(m_player));
-            });
+                l_player.sprite->setPosition(l_player.gameMap->getStartPosition());
+                l_player.currentState->setState(registry, dispatcher, std::make_shared<PlayerDeathState>(plr));
+           });
 
             return;
         }
 
         playersView.each([&](entt::entity plr, Player& l_player) {
+            l_player.sprite->setPosition(l_player.gameMap->getStartPosition());
             l_player.currentState->setState(registry, dispatcher, std::make_shared<PlayerIdleState>(plr));
         });
     }

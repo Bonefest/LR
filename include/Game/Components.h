@@ -37,6 +37,7 @@ struct Player {
     sf::Vector2f                    lastPosition;
     sf::Time                        idle;
     bool                            falling;
+    bool                            dead;
 };
 
 struct CamerasContext {

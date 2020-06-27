@@ -243,6 +243,7 @@ public:
             if(m_messages.empty()) {
                 m_currentMessage.duration = sf::seconds(99999.0f);
                 m_currentMessage.message = "";
+                m_currentMessage.priority = -1;
             } else {
                 m_currentMessage = m_messages.back();;
                 m_messages.pop_back();

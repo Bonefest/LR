@@ -1,20 +1,50 @@
 
 #include "Game/Level.h"
 
-LevelManager::LevelManager(): m_currentLevel(nullptr) { }
+LevelManager::LevelManager(): m_currentLevel(nullptr), m_switching(false) { }
 
 void LevelManager::update(entt::registry& registry, entt::dispatcher& dispatcher, const sf::Time& dt) {
+    if(m_switching) {
+        auto playersView = registry.view<Player>();
+        playersView.each([&](entt::entity plr, Player& player){
+            if(player.sprite->getCurrentAnimation()->isFinished()) {
+                switchLevel(registry, dispatcher);
+            }
+        });
+    }
+
     if(m_currentLevel != nullptr) {
         m_currentLevel->update(registry, dispatcher, dt);
     }
 }
 
 void LevelManager::setLevel(entt::registry& registry, entt::dispatcher& dispatcher,std::shared_ptr<Level> level) {
+    if(m_currentLevel == nullptr) {
+        m_currentLevel = level;
+        m_currentLevel->onLoad(registry, dispatcher);
+    } else {
+        m_switching = true;
+        m_nextLevel = level;
+
+        auto playersView = registry.view<Player>();
+        playersView.each([&](entt::entity plr, Player& player) {
+            player.sprite->activateAnimation("transform");
+            player.sprite->resetAnimation();
+        });
+    }
+
+}
+
+void LevelManager::switchLevel(entt::registry& registry, entt::dispatcher& dispatcher) {
+
+    m_switching = false;
+
     if(m_currentLevel != nullptr) {
         m_currentLevel->onDestroy(registry, dispatcher);
     }
+
     clearPreviousLevel(registry, dispatcher);
-    m_currentLevel = level;
+    m_currentLevel = m_nextLevel;
     m_currentLevel->onLoad(registry, dispatcher);
 }
 
@@ -43,6 +73,10 @@ void Level::resetPlayers(entt::registry& registry, entt::dispatcher& dispatcher)
         }
 
         player.sprite->setPosition(player.gameMap->getStartPosition());
+        player.sprite->setColor(sf::Color(255, 255, 255, 255));
+        player.currentState->setState(registry, dispatcher, std::make_shared<PlayerIdleState>(plr));
+        player.dead = false;
+        player.falling = false;
     });
 
 }

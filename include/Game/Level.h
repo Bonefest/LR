@@ -28,8 +28,13 @@ public:
         return m_animManager;
     }
 private:
+    void switchLevel(entt::registry& registry, entt::dispatcher& dispatcher);
+
     std::shared_ptr<Level>  m_currentLevel;
+    std::shared_ptr<Level>  m_nextLevel;
     AnimationManager*       m_animManager;
+
+    bool                    m_switching;
 };
 
 class Level {
@@ -121,6 +126,7 @@ public:
         m_flame[0] = createFlame(registry, m_whiteMap->convertToGlobalCoords(sf::Vector2i(2, 12)), WHITE);
         m_flame[1] = createFlame(registry, m_whiteMap->convertToGlobalCoords(sf::Vector2i(12, 5)), BLACK);
     }
+
 
     void update(entt::registry& registry, entt::dispatcher& dispatcher, const sf::Time& dt) {
         if(!registry.valid(m_flame[0]) && !registry.valid(m_flame[1])) {
