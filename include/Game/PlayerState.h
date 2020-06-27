@@ -118,5 +118,19 @@ private:
     bool        m_animationFinished;
 };
 
+class PlayerFallingState: public PlayerState {
+public:
+    PlayerFallingState(entt::entity player);
+
+    virtual void onActivate(entt::registry& registry, entt::dispatcher& dispatcher);
+
+    virtual void onDeactivate(entt::registry& registry, entt::dispatcher& dispatcher);
+
+    virtual void update(entt::registry& registry,
+                        entt::dispatcher& dispatcher,
+                        const sf::Time& dt);
+private:
+    sf::Time    m_elapsedTime;
+};
 
 #endif // PLAYERSTATE_H_INCLUDED

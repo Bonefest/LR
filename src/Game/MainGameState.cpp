@@ -4,6 +4,8 @@
 #include "Game/Systems.h"
 #include "Game/Components.h"
 
+#include "Game/FlameState.h"
+
 MainGameState::MainGameState(StateManager* manager): BaseState(manager) { }
 
 void MainGameState::onCreate() {
@@ -14,8 +16,10 @@ void MainGameState::onCreate() {
     SystemsManager* manager = m_smanager->getContext()->systemsManager;
 
     manager->addSystem(std::make_shared<GameMapsRenderingSystem>(), 1);
-    manager->addSystem(std::make_shared<PlayerAnimationsControllSystem>(), 2);
-    manager->addSystem(std::make_shared<KeyEventsNotifier>(), 2);
+    manager->addSystem(std::make_shared<FlameRenderingSystem>(), 2);
+    manager->addSystem(std::make_shared<PlayerAnimationsControllSystem>(), 3);
+    manager->addSystem(std::make_shared<KeyEventsNotifier>(), 3);
+    manager->addSystem(std::make_shared<AttackSystem>(), 4);
 
     auto windowSize = m_smanager->getContext()->window->getSize();
 
@@ -35,7 +39,9 @@ void MainGameState::onCreate() {
     registry.set<CamerasContext>(&m_blackCamera, &m_whiteCamera);
 
     m_blackMap = new GameMap(BLACK);
+    m_blackMap->setStartPosition(sf::Vector2f(0.0f, 0.0f));
     m_whiteMap = new GameMap(WHITE);
+    m_whiteMap->setStartPosition(sf::Vector2f(0.0f, 0.0f));
 
     m_black = createPlayer(BLACK);
     m_white = createPlayer(WHITE);
@@ -57,6 +63,8 @@ void MainGameState::onCreate() {
     m_whiteMap->setPlatform(1, 0);
     m_whiteMap->setPlatform(1, 1);
     m_whiteMap->setPlatform(1, 3);
+
+    createFlame(m_blackMap->convertToGlobalCoords(sf::Vector2i(6, 0)), BLACK);
 
 }
 
@@ -120,4 +128,22 @@ entt::entity MainGameState::createPlayer(PlayerColor color) {
     idleState->onActivate(registry, m_smanager->getContext()->systemsManager->getDispatcher());
 
     return player;
+}
+
+entt::entity MainGameState::createFlame(const sf::Vector2f& position, PlayerColor color) {
+    entt::registry& registry = m_smanager->getContext()->systemsManager->getRegistry();
+    entt::entity flame = registry.create();
+
+
+    std::shared_ptr<AnimatedSprite> sprite = std::make_shared<AnimatedSprite>();
+    sprite->setAnimation("flame", m_smanager->getContext()->animationManager->getAnimation("flame"));
+    sprite->activateAnimation("flame");
+    sprite->setPosition(position);
+    sprite->setOrigin(50.0f, 50.0f);
+
+    PlayerStatePtr state = std::make_shared<FlameIdleState>(flame);
+
+    registry.assign<Flame>(flame, sprite, color, state);
+
+    return flame;
 }

@@ -88,6 +88,18 @@
 			"size": {"w":128, "h": 128},
 			"frame_duration": 0.1,
 			"loop": false
+		},
+
+		"flame": {
+			"texture": "flame",
+			"type": "directional",
+			"direction": 0,
+			"reversed": false,
+			"start_frame": {"x": 0, "y": 0},
+			"end_frame": {"x": 400, "y": 1100},
+			"size": {"w": 100, "h": 100},
+			"frame_duration": 0.08,
+			"loop": true
 		}
 
 

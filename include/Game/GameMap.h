@@ -17,7 +17,11 @@ public:
 
     void setOffset(const sf::Vector2f& offset);
     sf::Vector2i convertToMapCoords(const sf::Vector2f& position) const;
+    sf::Vector2f convertToGlobalCoords(const sf::Vector2i& position) const;
     bool isSet(const sf::Vector2f& position) const;
+
+    void setStartPosition(const sf::Vector2f& position);
+    sf::Vector2f getStartPosition() const;
 
 private:
     void initVertices();
@@ -31,6 +35,7 @@ private:
     //TOP-LEFT
     sf::Vector2f                    m_offset;
 
+    sf::Vector2f                    m_startPosition;
 };
 
 struct GameMaps {

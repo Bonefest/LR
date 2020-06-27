@@ -26,7 +26,8 @@ struct Player {
                     GameMap* gmap): sprite(l_sprite),
                                     currentState(state),
                                     color(l_color),
-                                    gameMap(gmap) { }
+                                    gameMap(gmap),
+                                    falling(false) { }
 
     std::shared_ptr<AnimatedSprite> sprite;
     PlayerStatePtr                  currentState;
@@ -35,6 +36,7 @@ struct Player {
     MovingDirection                 lastMovingDirection;
     sf::Vector2f                    lastPosition;
     sf::Time                        idle;
+    bool                            falling;
 };
 
 struct CamerasContext {
@@ -43,6 +45,19 @@ struct CamerasContext {
 
     sf::View*   blackView;
     sf::View*   whiteView;
+};
+
+struct Flame {
+
+    explicit Flame(std::shared_ptr<AnimatedSprite> l_sprite,
+                   PlayerColor l_color,
+                   PlayerStatePtr l_state): sprite(l_sprite),
+                                            color(l_color),
+                                            state(l_state) { }
+
+    std::shared_ptr<AnimatedSprite> sprite;
+    PlayerColor                     color;
+    PlayerStatePtr                  state;
 };
 
 #endif // COMPONENTS_H_INCLUDED

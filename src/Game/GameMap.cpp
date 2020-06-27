@@ -68,8 +68,6 @@ void GameMap::translateVertices(const sf::Vector2f& offset) {
 
 #include <iostream>
 sf::Vector2i GameMap::convertToMapCoords(const sf::Vector2f& position) const {
-    std::cout << position.x << " " << position.y << "\n";
-
     sf::Vector2f i = m_vertices[4].position - m_vertices[0].position;
     sf::Vector2f j = -(m_vertices[1].position - m_vertices[0].position);
 
@@ -92,6 +90,13 @@ bool GameMap::isSet(const sf::Vector2f& position) const {
     }
 
     return m_platforms[pos.y][pos.x];
+}
+
+sf::Vector2f GameMap::convertToGlobalCoords(const sf::Vector2i& position) const {
+    sf::Vector2f i = m_vertices[4].position - m_vertices[0].position;
+    sf::Vector2f j = -(m_vertices[1].position - m_vertices[0].position);
+
+    return float(position.x) * i + float(position.y) * j + m_offset;
 }
 
 void GameMap::initVertices() {
@@ -135,4 +140,12 @@ void GameMap::initVertices() {
             m_vertices[i].color = rightColor;
         }
     }
+}
+
+void GameMap::setStartPosition(const sf::Vector2f& position) {
+    m_startPosition = position;
+}
+
+sf::Vector2f GameMap::getStartPosition() const {
+    return m_startPosition;
 }

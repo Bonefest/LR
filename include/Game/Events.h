@@ -8,5 +8,12 @@ struct KeyEvent {
     bool                pressed;
 };
 
+struct PlayerAttackEvent {
+
+    explicit PlayerAttackEvent(entt::entity l_player): player(l_player) { }
+
+    entt::entity player;
+};
+
 
 #endif // EVENTS_H_INCLUDED

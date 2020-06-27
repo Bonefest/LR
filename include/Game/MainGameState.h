@@ -24,6 +24,7 @@ public:
 
 private:
     entt::entity createPlayer(PlayerColor);
+    entt::entity createFlame(const sf::Vector2f& position, PlayerColor);
 
     sf::View        m_blackCamera;
     sf::View        m_whiteCamera;

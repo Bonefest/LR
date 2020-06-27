@@ -935,7 +935,7 @@
 1593188656 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/IntroState.h
 	"StateBase.h"
 
-1593244093 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/MainGameState.h
+1593271902 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/MainGameState.h
 	"StateBase.h"
 	"Components.h"
 	"Game/GameMap.h"
@@ -961,18 +961,20 @@
 	<SFML/Graphics.hpp>
 	"Window.h"
 
-1593265372 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/MainGameState.cpp
+1593277939 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/MainGameState.cpp
 	"Game/MainGameState.h"
 	<iostream>
 	"Game/Systems.h"
 	"Game/Components.h"
+	"Game/FlameState.h"
 
-1593265794 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/PlayerState.cpp
+1593275462 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/PlayerState.cpp
 	"Game/PlayerState.h"
 	"Game/Components.h"
 	"Game/Constants.h"
+	"Game/Events.h"
 
-1593266151 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/PlayerState.h
+1593268637 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/PlayerState.h
 	<memory>
 	"entt.hpp"
 	"Window.h"
@@ -980,16 +982,18 @@
 	"Game/Events.h"
 	"Constants.h"
 
-1593265329 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Systems.h
+1593278074 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Systems.h
 	"System.h"
 	"Components.h"
 	"Game/Events.h"
+	"Game/FlameState.h"
+	<iostream>
 
 1593232356 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Player.h
 
-1593199011 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Events.h
+1593272967 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Events.h
 
-1593266490 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Components.h
+1593277039 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Components.h
 	<SFML/Graphics.hpp>
 	"AnimatedSprite.h"
 	"PlayerState.h"
@@ -997,16 +1001,24 @@
 	"Constants.h"
 	"Game/GameMap.h"
 
-1593258237 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Constants.h
+1593273715 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/Constants.h
 	<SFML/Graphics.hpp>
 
-1593255208 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/GameMap.h
+1593271947 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/GameMap.h
 	<vector>
 	"Game/Components.h"
 	"Window.h"
 
-1593256036 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/GameMap.cpp
+1593274868 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/GameMap.cpp
 	"Game/GameMap.h"
 	"Game/Constants.h"
 	<iostream>
+
+1593277842 source:/home/miofix/Programming/GameDevelopment/LR/LR/src/Game/FlameState.cpp
+	"Game/FlameState.h"
+	"Game/Components.h"
+	<cmath>
+
+1593276855 /home/miofix/Programming/GameDevelopment/LR/LR/include/Game/FlameState.h
+	"Game/PlayerState.h"
 

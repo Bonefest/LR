@@ -3,6 +3,8 @@
 
 #include "Game/Constants.h"
 
+#include "Game/Events.h"
+
 static MovingDirection getDirection(sf::Keyboard::Key key, PlayerColor color) {
     if(key == sf::Keyboard::A) {
         return (color == PlayerColor::WHITE) ? LEFT : RIGHT;
@@ -191,9 +193,12 @@ void PlayerMovingState::update(entt::registry& registry,
 
 
     sf::Vector2f nextPos = player.sprite->getPosition() + m_velocity.x * dt.asSeconds() * Constants::i + m_velocity.y * dt.asSeconds() * Constants::j;
-
-    if(player.gameMap->isSet(nextPos)) {
-        player.sprite->setPosition(nextPos);
+    player.sprite->setPosition(nextPos);
+    if(!player.gameMap->isSet(nextPos)) {
+        if(m_direction == LEFT || m_direction == BOTTOM) {
+            player.sprite->setColor(sf::Color(255, 255, 255, 0));
+        }
+        setState(registry, dispatcher, std::make_shared<PlayerFallingState>(m_player));
     }
 
     for(auto key: m_keys) {
@@ -245,7 +250,6 @@ void PlayerAttackState::onActivate(entt::registry& registry, entt::dispatcher& d
     Player& player = registry.get<Player>(m_player);
     player.sprite->activateAnimation("attack");
     player.sprite->resetAnimation();
-    //trigger attack event somewhere
 }
 
 void PlayerAttackState::update(entt::registry& registry,
@@ -253,6 +257,7 @@ void PlayerAttackState::update(entt::registry& registry,
                                const sf::Time& dt) {
     Player& player = registry.get<Player>(m_player);
     if(player.sprite->getCurrentAnimation()->isFinished()) {
+        dispatcher.trigger<PlayerAttackEvent>(m_player);
         setState(registry, dispatcher, std::make_shared<PlayerIdleState>(m_player));
     }
 }
@@ -314,4 +319,36 @@ void PlayerTransformState::update(entt::registry& registry,
             player.sprite->setColor(sf::Color(rand() % 255, rand() % 255, rand() % 255));
         }
     }
+}
+
+PlayerFallingState::PlayerFallingState(entt::entity player): PlayerState(player) { }
+
+void PlayerFallingState::onActivate(entt::registry& registry,
+                                    entt::dispatcher& dispatcher) {
+    Player& player = registry.get<Player>(m_player);
+    player.sprite->activateAnimation("idle");
+    player.falling = true;
+    player.idle = sf::seconds(0.0f);
+}
+
+void PlayerFallingState::onDeactivate(entt::registry& registry,
+                                      entt::dispatcher& dispatcher) {
+    Player& player = registry.get<Player>(m_player);
+    player.sprite->setColor(sf::Color(255, 255, 255, 255));
+    player.falling = false;
+}
+
+void PlayerFallingState::update(entt::registry& registry,
+                                entt::dispatcher& dispatcher,
+                                const sf::Time& dt) {
+    Player& player = registry.get<Player>(m_player);
+
+    m_elapsedTime += dt;
+    if(m_elapsedTime.asSeconds() > 1.0f) {
+        player.sprite->setPosition(player.gameMap->getStartPosition());
+        //trigger player fall event
+        setState(registry, dispatcher, std::make_shared<PlayerIdleState>(m_player));
+    }
+
+    player.sprite->setPosition(player.sprite->getPosition() + sf::Vector2f(0.0f, 250.0f) * dt.asSeconds());
 }
